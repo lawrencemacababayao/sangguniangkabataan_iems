@@ -5,6 +5,9 @@
     flex-direction: column;
     margin-top: 5rem;
   }
+  .loginform {
+    height: 30rem;
+  }
 
   .sk_text {
     display: flex;

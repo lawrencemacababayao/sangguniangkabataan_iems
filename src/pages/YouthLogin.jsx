@@ -80,7 +80,7 @@ const YouthLogin = () => {
       {/* Login Form */}
       <form
         onSubmit={handleLogin}
-        className="bg-[#F3F1FF]/70 pt-5 rounded-2xl shadow-xl w-full max-w-md h-3/5 flex flex-col items-center mt-10"
+        className="loginform bg-[#F3F1FF]/70 pt-5 rounded-2xl shadow-xl w-full max-w-md h-3/5 flex flex-col items-center mt-10"
       >
         <h1 className="text-4xl font-bold text-[#3489FF] mt-7">LOGIN</h1>
         <div className="w-full h-full p-15 pt-8 px-8">
