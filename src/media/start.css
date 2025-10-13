@@ -1,10 +1,10 @@
 /* Media query for mobile devices */
 @media (max-width: 768px) {
   .starttext1 {
-    font-size: 20px;
+    font-size: 18px;
   }
     .starttext2 {
-    font-size: 40px;
+    font-size: 37px;
   }
   .form {
     height: 450px;
