@@ -3,7 +3,7 @@ import React from 'react'
 const YouthHome = () => {
   return (
     <div>
-      bajskdgaksudasd
+      Welcome Lods 
     </div>
   )
 }
