@@ -22,7 +22,7 @@ const handleYouthClick = () => {
 
       {/* content layer */}
       <div className="relative z-10 flex items-center justify-center h-full pr-5 pl-5">
-        <form className='form bg-[#F3F1FF]/70 pt-5 mt-0 rounded-2xl shadow-xl w-full max-w-md h-3/4 flex flex-col items-center '>
+        <form className='form bg-[#F3F1FF]/70 pt-5 mt-0 rounded-2xl shadow-xl w-full max-w-md h-135 flex flex-col items-center '>
           <div className='w-3/4 min-h-1/4 flex justify-center'><img src={logoImage} alt="" className=' w-1/2 object-cover'/></div>
           <h3 className='starttext1 text-2xl font-medium'>SANGGUNIANG</h3>
           <h1 className='starttext2 text-5xl font-bold'>KABATAAN</h1>
