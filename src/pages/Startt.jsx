@@ -1,11 +1,11 @@
-import React from 'react'
 import { useEffect } from "react";
 import bgImage from "../assets/ChatGPT Image Oct 11, 2025, 02_38_22 PM.png";
 import logoImage from "../assets/skkkk.png"
 import { useNavigate } from "react-router-dom";  //hook for navigating between pages 
 
-const Start = () => {
-const navigate = useNavigate();
+const Startt = () => {
+
+    const navigate = useNavigate();
 
 const handleYouthClick = () => {
     navigate("/youthlogin");
@@ -34,4 +34,4 @@ const handleYouthClick = () => {
   )
 }
 
-export default Start
+export default Startt

@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom' // butang ni if mag create ug router 
 import './styles.css'
-import Start from './pages/start'
+import Startt from './pages/Startt'
 import YouthLogin from './pages/YouthLogin'
 import YouthSignup from './pages/YouthSignup'
 import YouthVerificationResend from './pages/YouthVerificationResend'
@@ -13,7 +13,7 @@ import YouthHome from './pages/YouthHome'
 const router = createBrowserRouter([
   {
   path: '/', 
-  element: <Start/>,
+  element: <Startt/>,
   errorElement: <div>404 Not Found</div>, //this part if mali imong gi type sa localhostname mao ni ang error na mogawas
 },
 {
