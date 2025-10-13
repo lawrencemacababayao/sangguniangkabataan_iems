@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import bgImage from "../assets/ChatGPT Image Oct 11, 2025, 02_38_22 PM.png";
 import logoImage from "../assets/skkkk.png";
 import { auth, db } from "../config/firebase";
-import { sendEmailVerification, onAuthStateChanged } from "firebase/auth";
+import { sendEmailVerification, onAuthStateChanged, reload } from "firebase/auth";
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { applyActionCode } from "firebase/auth";
@@ -102,7 +102,7 @@ useEffect(() => {
     return (
       <div className="relative w-screen h-screen bg-cover bg-top flex flex-col items-center justify-center"
       style={{ backgroundImage: `url(${bgImage})` }}>
-        <div className="w-70 h-20 bg-white/70 flex justify-center p-5 items-center rounded-3xl text-xl">Checking Verification...</div>
+        <div className="w-70 h-20 bg-white/70 flex justify-center p-5 items-center rounded-3xl">Checking Verification...</div>
       </div>
     );
   }

@@ -58,57 +58,48 @@ const YouthSignup = () => {
 
   // ✅ Signup logic
   const handleSignup = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match!");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    // Check if email already exists in official_youth
-    const officialSnap = await getDoc(doc(db, "official_youth", formData.email));
-    if (officialSnap.exists()) {
-      alert("Email already exists. Please login instead.");
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
       return;
     }
 
-    // ✅ Create user in Firebase Auth
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      formData.email,
-      formData.password
-    );
-    const user = userCredential.user;
+    try {
+      setLoading(true);
 
-    // Send verification email
-    await sendEmailVerification(user);
+      // 1️⃣ Create user in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
 
-    // Save data to pending collection
-    await setDoc(doc(db, "pending", user.uid), {
-      firstname: formData.firstname,
-      lastname: formData.lastname,
-      username: formData.username,
-      barangay: formData.barangay,
-      gender: formData.gender,
-      email: formData.email,
-      verified: false,
-      createdAt: new Date(),
-    });
+      // 2️⃣ Send verification email
+      await sendEmailVerification(user);
 
-    setVerificationSent(true);
-    navigate("/youthresendverification");
+      // 3️⃣ Save data to "pending" collection
+      await setDoc(doc(db, "pending", user.uid), {
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        username: formData.username,
+        barangay: formData.barangay,
+        gender: formData.gender,
+        email: formData.email,
+        verified: false,
+        createdAt: new Date(),
+      });
 
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  } finally {
-    setLoading(false);
-  }
-};
-
+      setVerificationSent(true);
+      navigate("/youthresendverification");
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     document.title = "Sign Up | Sangguniang Kabataan";

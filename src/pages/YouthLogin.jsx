@@ -21,53 +21,49 @@ const YouthLogin = () => {
     document.title = "Login | Sangguniang Kabataan";
   }, []);
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    // 1️⃣ Log in the user
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+    try {
+      // 1️⃣ Log in the user
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-    // 🔄 Force refresh of user data
-    await user.reload();
+      // 2️⃣ Check if email is verified
+      if (!user.emailVerified) {
+        alert("Please verify your email first before logging in.");
+        setLoading(false);
+        return;
+      }
 
-    // 2️⃣ Check if email is verified
-    if (!user.emailVerified) {
-      alert("Please verify your email first before logging in.");
+      // 3️⃣ Move from 'pending' → 'official_youth' if exists
+      const pendingRef = doc(db, "pending", user.uid);
+      const pendingSnap = await getDoc(pendingRef);
+
+      if (pendingSnap.exists()) {
+        const data = pendingSnap.data();
+
+        // Copy data to official_youth collection
+        await setDoc(doc(db, "official_youth", user.uid), {
+          ...data,
+          verified: true,
+          verifiedAt: new Date(),
+        });
+
+        // Delete from pending
+        await deleteDoc(pendingRef);
+      }
+
+      navigate("/youthhomepage"); // replace with your youth dashboard/home route
+
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // 3️⃣ Move from 'pending' → 'official_youth' if exists
-    const pendingRef = doc(db, "pending", user.uid);
-    const pendingSnap = await getDoc(pendingRef);
-
-    if (pendingSnap.exists()) {
-      const data = pendingSnap.data();
-
-      // Copy data to official_youth collection
-      await setDoc(doc(db, "official_youth", user.uid), {
-        ...data,
-        verified: true,
-        verifiedAt: new Date(),
-      });
-
-      // Delete from pending
-      await deleteDoc(pendingRef);
-    }
-
-    navigate("/youthhomepage"); // ✅ Success redirect
-
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
     <div
