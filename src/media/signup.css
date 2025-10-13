@@ -1,0 +1,20 @@
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sk_text {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .sk_text .text1 {
+    font-size: 20px;
+  }
+  .sk_text .text2 {
+    font-size: 40px;
+    margin-bottom: 2rem;
+  }
+}

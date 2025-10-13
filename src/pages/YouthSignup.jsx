@@ -8,6 +8,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import "../media/signup.css"
 
 const YouthSignup = () => {
   const navigate = useNavigate();
@@ -111,11 +112,11 @@ const YouthSignup = () => {
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       {/* Header */}
-      <div className="w-full flex justify-center items-center">
+      <div className="container w-full flex justify-center items-center">
         <img src={logoImage} alt="SK Logo" className="w-32 object-cover mr-3" />
-        <div className="text-white/80 text-center flex gap-5">
-          <h1 className="text-4xl sm:text-5xl font-light">SANGGUNIANG</h1>
-          <h1 className="text-4xl sm:text-5xl font-bold">KABATAAN</h1>
+        <div className="sk_text text-white/80 text-center flex gap-5">
+          <h1 className="text1 text-4xl sm:text-5xl font-light">SANGGUNIANG</h1>
+          <h1 className="text2 text-4xl sm:text-5xl font-bold">KABATAAN</h1>
         </div>
       </div>
 
