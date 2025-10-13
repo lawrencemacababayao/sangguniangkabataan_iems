@@ -67,7 +67,7 @@ const YouthLogin = () => {
 
   return (
     <div
-      className="relative w-screen h-screen bg-cover bg-top flex flex-col items-center"
+      className="p-10 pt-0 relative w-screen h-screen bg-cover bg-top flex flex-col items-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       {/* Header */}
