@@ -3,12 +3,19 @@ import logoImage from "../assets/skkkk.png";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../config/firebase";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
+import { 
+  createUserWithEmailAndPassword, 
+  sendEmailVerification
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import "../media/signup.css"
+import { 
+  collection, 
+  query, 
+  where, 
+  getDocs, 
+  doc, 
+  setDoc 
+} from "firebase/firestore";
+import "../media/signup.css";
 
 const YouthSignup = () => {
   const navigate = useNavigate();
@@ -29,20 +36,32 @@ const YouthSignup = () => {
   const [verificationSent, setVerificationSent] = useState(false);
   const [barangays, setBarangays] = useState([]);
 
- useEffect(() => { 
+  // ✅ Helper function: Capitalize only first letter
+  function capitalizeFirstLetter(str) {
+    if (!str) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
+  // ✅ Load barangays
+  useEffect(() => { 
     async function loadBarangays() { 
-        try { const res = await fetch("https://psgc.gitlab.io/api/barangays/");
-             const data = await res.json();
-              const misOrBarangays = data 
-              .filter((b) => b.provinceCode === "104300000") 
-              .sort((a, b) => a.name.localeCompare(b.name)); 
-              setBarangays(misOrBarangays); 
-            } catch (error) {
-                 console.error("Error loading barangays:", error);
-                 } 
-                } 
-                loadBarangays(); 
-            }, []);
+      try { 
+        const res = await fetch("https://psgc.gitlab.io/api/barangays/");
+        const data = await res.json();
+        const misOrBarangays = data
+          .filter((b) => b.provinceCode === "104300000")
+          .sort((a, b) => a.name.localeCompare(b.name));
+        setBarangays(misOrBarangays);
+      } catch (error) {
+        console.error("Error loading barangays:", error);
+      } 
+    } 
+    loadBarangays(); 
+  }, []);
+
+  useEffect(() => {
+    document.title = "Sign Up | Sangguniang Kabataan";
+  }, []);
 
   // ✅ Input change handler
   const handleChange = (e) => {
@@ -61,15 +80,45 @@ const YouthSignup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
 
+    // Check password match
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
+    // Ensure barangay is selected
+    if (!formData.barangay) {
+      alert("Please select your Barangay.");
+      return;
+    }
+
+    // Format names
+    const formattedFirstname = capitalizeFirstLetter(formData.firstname);
+    const formattedLastname = capitalizeFirstLetter(formData.lastname);
+
     try {
       setLoading(true);
 
-      // 1️⃣ Create user in Firebase Auth
+      // ✅ Check if user exists in barangay data (only for South Poblacion)
+      if (formData.barangay.toLowerCase() === "south poblacion") {
+        const southRef = collection(db, "south_poblacion_data");
+        const q = query(
+          southRef,
+          where("firstname", "==", formattedFirstname),
+          where("lastname", "==", formattedLastname)
+        );
+
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) {
+          alert(
+            "Your name is not listed in South Poblacion records. Please contact your SK official."
+          );
+          setLoading(false);
+          return;
+        }
+      }
+
+      // ✅ Create Firebase Auth user
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
@@ -77,34 +126,39 @@ const YouthSignup = () => {
       );
       const user = userCredential.user;
 
-      // 2️⃣ Send verification email
-      await sendEmailVerification(user);
-
-      // 3️⃣ Save data to "pending" collection
+      // ✅ Save to Firestore "pending" collection
       await setDoc(doc(db, "pending", user.uid), {
-        firstname: formData.firstname,
-        lastname: formData.lastname,
+        firstname: formattedFirstname,
+        lastname: formattedLastname,
         username: formData.username,
-        barangay: formData.barangay,
         gender: formData.gender,
         email: formData.email,
-        verified: false,
+        barangay: capitalizeFirstLetter(formData.barangay),
+        status: "pending",
         createdAt: new Date(),
       });
 
-      setVerificationSent(true);
+      // ✅ Send email verification
+      await sendEmailVerification(user);
       navigate("/youthresendverification");
+
+      setFormData({
+        firstname: "",
+        lastname: "",
+        username: "",
+        barangay: "",
+        gender: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
     } catch (error) {
-      console.error(error);
-      alert(error.message);
+      console.error("Signup error:", error);
+      alert("Error: " + error.message);
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    document.title = "Sign Up | Sangguniang Kabataan";
-  }, []);
 
   return (
     <div
@@ -162,11 +216,12 @@ const YouthSignup = () => {
               required
             />
 
-            <label className="font-medium ml-2">Select Barangay</label>
+            <label className="font-medium ml-2">Barangay</label>
             <select
               id="barangay"
               value={formData.barangay}
               onChange={handleChange}
+              required
               className="w-full bg-white/50 border-[#3489FF] border-2 outline-none px-4 h-10 mb-3 rounded-3xl cursor-pointer appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMzQ4OUZGIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSI2Ij48cGF0aCBkPSJNNSA2TDAtMEgxMEw1IDZaIi8+PC9zdmc+')] bg-no-repeat bg-[right_1.5rem_center]"
             >
               <option value="">Select Barangay</option>
@@ -185,6 +240,7 @@ const YouthSignup = () => {
               id="gender"
               value={formData.gender}
               onChange={handleChange}
+              required
               className="w-full bg-white/50 border-[#3489FF] border-2 outline-none px-4 h-10 mb-3 rounded-3xl cursor-pointer appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMzQ4OUZGIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSI2Ij48cGF0aCBkPSJNNSA2TDAtMEgxMEw1IDZaIi8+PC9zdmc+')] bg-no-repeat bg-[right_1.5rem_center]"
             >
               <option value="">Select Gender</option>
@@ -242,27 +298,6 @@ const YouthSignup = () => {
           </span>
         </p>
       </form>
-
-      {/* Popup for verification */}
-      {verificationSent && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-2xl text-center shadow-lg max-w-sm">
-            <h2 className="text-2xl font-bold text-[#3489FF] mb-3">
-              Verify your Email
-            </h2>
-            <p>
-              A verification link was sent to <b>{formData.email}</b>. Please
-              check your inbox.
-            </p>
-            <button
-              onClick={handleLoginClick}
-              className="mt-4 bg-[#3489FF] text-white px-5 py-2 rounded-3xl hover:bg-[#2872d1] transition"
-            >
-              Go to Login
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

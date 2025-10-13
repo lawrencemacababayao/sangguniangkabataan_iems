@@ -35,41 +35,38 @@ useEffect(() => {
 
 
   // 🧠 Check verification status automatically
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await user.reload(); // Refresh user data
-        if (user.emailVerified) {
-          try {
-            // Move from pending → official_youth
-            const pendingRef = doc(db, "pending", user.uid);
-            const snap = await getDoc(pendingRef);
-
-            if (snap.exists()) {
-              const data = snap.data();
-              await setDoc(doc(db, "official_youth", user.uid), {
-                ...data,
-                verified: true,
-                verifiedAt: new Date(),
-              });
-              await deleteDoc(pendingRef);
-            }
-
-            alert("Your email has been verified successfully!");
-            navigate("/youthlogin");
-          } catch (error) {
-            console.error("Error moving user:", error);
+ useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      await user.reload();
+      if (user.emailVerified) {
+        try {
+          const pendingRef = doc(db, "pending", user.uid);
+          const snap = await getDoc(pendingRef);
+          if (snap.exists()) {
+            const data = snap.data();
+            await setDoc(doc(db, "official_youth", user.uid), {
+              ...data,
+              verified: true,
+              verifiedAt: new Date(),
+            });
+            await deleteDoc(pendingRef);
           }
-        } else {
-          setChecking(false);
+          alert("Your email has been verified successfully!");
+          navigate("/youthlogin");
+        } catch (error) {
+          console.error("Error moving user:", error);
         }
       } else {
-        setChecking(false);
+        setChecking(false); // ✅ Let user see resend screen
       }
-    });
+    } else {
+      setChecking(false); // ✅ Also stop loading even if not signed in
+    }
+  });
 
-    return () => unsubscribe();
-  }, [navigate]);
+  return () => unsubscribe();
+}, [navigate]);
 
   const handleResend = async () => {
     const user = auth.currentUser;
