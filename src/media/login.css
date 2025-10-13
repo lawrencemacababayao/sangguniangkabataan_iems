@@ -3,7 +3,7 @@
   .container {
     display: flex;
     flex-direction: column;
-    margin-top: 4rem;
+    margin-top: 5rem;
   }
 
   .sk_text {
@@ -21,5 +21,5 @@
   .input_parent {
     gap:0;
   }
-  
+
 }

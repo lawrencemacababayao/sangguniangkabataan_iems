@@ -20,7 +20,7 @@ const handleYouthClick = () => {
       {/* Optional overlay (for dark filter) */}
 
       {/* content layer */}
-      <div className="relative z-10 flex items-center justify-center h-full">
+      <div className="relative z-10 flex items-center justify-center h-full pr-10 pl-10">
         <form className='bg-[#F3F1FF]/70 pt-5 mt-0 rounded-2xl shadow-xl w-full max-w-md h-3/4 flex flex-col items-center '>
           <div className='w-3/4 min-h-1/4 flex justify-center'><img src={logoImage} alt="" className=' w-1/2 object-cover'/></div>
           <h3 className='text-2xl font-medium'>SANGGUNIANG</h3>

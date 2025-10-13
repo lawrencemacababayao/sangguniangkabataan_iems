@@ -112,7 +112,7 @@ const YouthSignup = () => {
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       {/* Header */}
-      <div className="container w-full flex justify-center items-center">
+      <div className="parent w-full flex justify-center items-center">
         <img src={logoImage} alt="SK Logo" className="w-32 object-cover mr-3" />
         <div className="sk_text text-white/80 text-center flex gap-5">
           <h1 className="text1 text-4xl sm:text-5xl font-light">SANGGUNIANG</h1>
