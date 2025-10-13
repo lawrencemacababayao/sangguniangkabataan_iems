@@ -129,7 +129,7 @@ const YouthSignup = () => {
           SIGN UP
         </h1>
 
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="input_parent w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Left column */}
           <div>
             <label className="font-medium ml-2">Firstname</label>
