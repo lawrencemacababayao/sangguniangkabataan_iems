@@ -1,0 +1,24 @@
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 4rem;
+  }
+
+  .sk_text {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .text1 {
+    font-size: 20px;
+  }
+    .text2 {
+    font-size: 40px;
+    margin-bottom: 2rem;
+  }
+  .input_parent {
+    gap:0;
+  }
+}

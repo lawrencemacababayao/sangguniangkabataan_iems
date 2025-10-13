@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from "../config/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
-
+import "../media/login.css"
 const YouthLogin = () => {
   const navigate = useNavigate();
 
@@ -71,10 +71,10 @@ const YouthLogin = () => {
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       {/* Header */}
-      <div className="w-full h-1/6 mt-5 flex justify-center items-center">
+      <div className="container w-full h-1/6 mt-5 flex justify-center items-center">
         <img src={logoImage} alt="SK Logo" className="w-30 object-cover mr-3" />
-        <h1 className="text-white/80 text-5xl mr-3">SANGGUNIANG</h1>
-        <h1 className="text-white/80 font-bold text-5xl">KABATAAN</h1>
+        <h1 className="text1 text-white/80 text-5xl mr-3">SANGGUNIANG</h1>
+        <h1 className="text2 text-white/80 font-bold text-5xl">KABATAAN</h1>
       </div>
 
       {/* Login Form */}
